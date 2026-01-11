@@ -1,10 +1,12 @@
-﻿using System;
+﻿using Pomeroo.Models;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Media;
+using System.Reflection;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -27,12 +29,12 @@ namespace Pomeroo
         // general parameters
         bool isRunning = false;
         bool isWorkTime = true;
-        int workTime = 1500; 
-        int shortRest = 300; 
-        int longRest = 900; 
-        int cycleCount = 4;
         int completedCycles = 0;
         int timeLeft;
+        int workTime;
+        int shortRest;
+        int longRest;
+        int cycleCount;
 
         public Form1()
         {
@@ -40,6 +42,15 @@ namespace Pomeroo
 
             // for window dragging
             pnlTop.MouseDown += new MouseEventHandler(pnlTop_MouseDown);
+        }
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            workTime = TimerModel.workTime;
+            shortRest = TimerModel.shortRest;
+            longRest = TimerModel.longRest;
+            cycleCount = TimerModel.cycleCount;
+
+            timeLeft = workTime;
         }
 
         private void btnStart_Click(object sender, EventArgs e)
@@ -100,11 +111,6 @@ namespace Pomeroo
                 isWorkTime = !isWorkTime;
                 timer1.Start();
             }
-        }
-
-        private void Form1_Load(object sender, EventArgs e)
-        {
-            timeLeft = workTime;
         }
 
         private void button1_Click(object sender, EventArgs e)
