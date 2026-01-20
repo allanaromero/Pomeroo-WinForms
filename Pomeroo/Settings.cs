@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -30,11 +31,25 @@ namespace Pomeroo
 
         private void btnSaveSettings_Click(object sender, EventArgs e)
         {
+            string[] formats = { "mm\\:ss", "hh\\:mm\\:ss" };
+
             // assign new values to model
-            TimerModel.workTime = int.Parse(txtWorkTime.Text);
-            TimerModel.shortRest = int.Parse(txtShortRest.Text);
-            TimerModel.longRest = int.Parse(txtLongRest.Text);
-            TimerModel.cycleCount = int.Parse(txtCycleCount.Text);
+            if (TimeSpan.TryParseExact(txtWorkTime.Text, formats, CultureInfo.InvariantCulture, out TimeSpan workTime) &&
+               TimeSpan.TryParseExact(txtShortRest.Text, formats, CultureInfo.InvariantCulture, out TimeSpan shortRest) &&
+               TimeSpan.TryParseExact(txtLongRest.Text, formats, CultureInfo.InvariantCulture, out TimeSpan longRest) &&
+               int.TryParse(txtCycleCount.Text, out int cycleCount))
+            {
+                // assign new values to model
+                TimerModel.workTime = (int)workTime.TotalSeconds;
+                TimerModel.shortRest = (int)shortRest.TotalSeconds;
+                TimerModel.longRest = (int)longRest.TotalSeconds;
+                TimerModel.cycleCount = cycleCount;
+            }
+            else
+            {
+                MessageBox.Show("Please enter valid values for all fields.", "Invalid Input", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
 
             // close window
             this.DialogResult = DialogResult.OK;
@@ -42,9 +57,9 @@ namespace Pomeroo
 
         private void Settings_Load(object sender, EventArgs e)
         {
-            txtWorkTime.Text = TimerModel.workTime.ToString();
-            txtShortRest.Text = TimerModel.shortRest.ToString();
-            txtLongRest.Text = TimerModel.longRest.ToString();
+            txtWorkTime.Text = TimeSpan.FromSeconds(TimerModel.workTime).ToString(@"mm\:ss");
+            txtShortRest.Text = TimeSpan.FromSeconds(TimerModel.shortRest).ToString(@"mm\:ss");
+            txtLongRest.Text = TimeSpan.FromSeconds(TimerModel.longRest).ToString(@"mm\:ss");
             txtCycleCount.Text = TimerModel.cycleCount.ToString();
         }
     }

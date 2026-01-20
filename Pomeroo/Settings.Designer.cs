@@ -60,7 +60,7 @@
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(258, 36);
             this.label2.TabIndex = 1;
-            this.label2.Text = "Note: Enter values in seconds (ex. 1 minute = 60)";
+            this.label2.Text = "Note: Enter time in mm:ss (or hh:mm:ss) format.";
             this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // txtWorkTime
